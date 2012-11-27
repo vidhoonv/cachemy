@@ -1,0 +1,270 @@
+<?php
+session_start();
+require_once("fb-php-sdk/facebook.php");
+$config = array();
+$config['appId'] = '117535755037825';
+$config['secret'] = '7a71c2c31cbc6a81ffc8fa17717dd603';
+
+$facebook = new Facebook($config);
+$user = $facebook->getUser();
+?>
+
+<html>
+<head>
+<title>Photo Stream</title>
+<style type="text/css">
+.nav
+{
+list-style-type:none;
+margin:0 0 50 0;
+padding:0;
+}
+.nav_link
+{
+display:inline;
+}
+
+div.gallery
+{
+	margin:20px;
+	display: block;
+}
+div.img
+  {
+  margin:10px;
+  border:1px solid #0000ff;
+  height:auto;
+  width:auto;
+  float:left;
+  text-align:center;
+  }
+div.img img
+  {
+  display:inline;
+  margin:3px;
+  border:1px solid #ffffff;
+  }
+div.img a:hover img
+  {
+  border:1px solid #0000ff;
+  }
+div.desc
+  {
+  text-align:center;
+  font-weight:normal;
+  width:120px;
+  margin:2px;
+  }
+  div.heading1
+  {
+   font-family: times, Times New Roman, times-roman, georgia, serif;
+	color: #444;
+	margin: 0;
+	padding: 0px 0px 6px 0px;
+	font-size: 51px;
+	line-height: 44px;
+	letter-spacing: -2px;
+	font-weight: bold;
+	display:block;
+	}
+
+</style>
+</head>
+<body>
+<ul class="nav">
+<li class="nav_link"><?php echo anchor('home_new', 'About', array('title' => 'About')); ?></li>
+<li class="nav_link"><?php echo anchor('photo_stream', 'Photo Stream', array('title' => 'Photo Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('video_stream', 'Video Stream', array('title' => 'Video Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('link_stream', 'Link Stream', array('title' => 'Link Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('updates_stream', 'Updates Stream', array('title' => 'Updates Stream')); ?></li>
+<li class="nav_link"><a href="about.asp">Hang outs</a></li>
+<li class="nav_link"><?php echo anchor('app_stream', 'App activities', array('title' => 'App activities')); ?></li>
+</ul>
+
+<div class="gallery">
+<p>
+<div class="heading1">
+User photos
+</div>
+<?php
+
+
+$fql = 'SELECT  source_id, attachment, attribution, description, message FROM stream WHERE filter_key = "nf" AND attachment!= "" AND attribution = "" LIMIT 50';// . $user_id;
+
+
+$ret_obj = $facebook->api(array( 'method' => 'fql.query','query' => $fql));
+$prev_obj=NULL;
+foreach($ret_obj as $news_item)
+{
+
+    if(empty($news_item['attachment']['media']))
+     {
+     		continue;
+     }
+     else if($news_item['attachment']['media'][0]['type'] == "photo")
+     {
+     			if($prev_obj != NULL && $prev_obj['attachment']['media'][0]['src'] ==  $news_item['attachment']['media'][0]['src'])
+     			{
+     				continue;
+     			}
+     			$fql1 = 'SELECT name FROM page WHERE page_id=' .  $news_item['attachment']['media'][0]['photo']['owner'];
+     			$ret_obj1 =  $facebook->api(array( 'method' => 'fql.query','query' => $fql1)); 
+     			
+     			if(empty($ret_obj1))
+     			{
+                $img_src =   $news_item['attachment']['media'][0]['src'];  
+                $img_fb_link =    $news_item['attachment']['media'][0]['href'];
+                if(empty($news_item['message']))
+                {
+                		if(empty($news_item['description']))
+                		{
+                				if(empty($news_item['attachment']['name']))
+                				{
+                						if(empty($news_item['attachment']['description']))
+                						{
+                								$img_desc = "Posted by" . $news_item['source_id'];
+                						}
+                						else
+                						{
+                								$img_desc = $news_item['attachment']['description'];
+                						}
+                				}
+                				else
+                				{
+                					$img_desc = $news_item['attachment']['name'];
+                				}
+                		}
+                		else
+                		{
+                			$img_desc = $news_item['description'];
+                		}
+                }
+                else
+                {
+                		$img_desc = $news_item['message'];
+                }     
+                if(strlen($img_desc)>100)
+					{
+						$img_desc = "Posted by" . $news_item['source_id'];
+					}  
+					
+					
+ ?>                                
+
+
+	<div class="img">
+	<a target="_blank" href=<?php echo $img_fb_link; ?> >
+  <img src=<?php echo $img_src; ?> alt=<?php echo $img_desc; ?> width="110" height="90" />
+ 	</a>
+  
+    <div class="desc"><?php echo $img_desc ?></div>
+</div>
+
+<?php
+				$prev_obj=$news_item;
+			}
+		
+		}
+	}	
+?>
+</p>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<p>
+<div class="gallery">
+<div class="heading1">
+Other photos 
+</div>
+
+<?php
+
+
+$fql = 'SELECT  source_id, attachment, attribution, description, message FROM stream WHERE filter_key = "nf" AND attachment!= "" AND attribution = "" LIMIT 50';// . $user_id;
+
+
+$ret_obj = $facebook->api(array( 'method' => 'fql.query','query' => $fql));
+	$prev_obj=NULL;
+foreach($ret_obj as $news_item)
+{
+
+     if(empty($news_item['attachment']['media']) )
+     {
+     		continue;
+     }
+     else if($news_item['attachment']['media'][0]['type'] == "photo")
+     {
+     
+     			if($prev_obj != NULL && $prev_obj['attachment']['media'][0]['src'] ==  $news_item['attachment']['media'][0]['src'])
+     			{
+     				continue;
+     			}
+     			$fql1 = 'SELECT name FROM page WHERE page_id=' .  $news_item['attachment']['media'][0]['photo']['owner'];
+     			$ret_obj1 =  $facebook->api(array( 'method' => 'fql.query','query' => $fql1)); 
+     			
+     			if(!empty($ret_obj1))
+     			{
+                $img_src =   $news_item['attachment']['media'][0]['src'];  
+                $img_fb_link =    $news_item['attachment']['media'][0]['href'];
+                if(empty($news_item['message']))
+                {
+                		if(empty($news_item['description']))
+                		{
+                				if(empty($news_item['attachment']['name']))
+                				{
+                						if(empty($news_item['attachment']['description']))
+                						{
+                								$img_desc = "Posted by" . $news_item['source_id'];
+                						}
+                						else
+                						{
+                								$img_desc = $news_item['attachment']['description'];
+                						}
+                				}
+                				else
+                				{
+                					$img_desc = $news_item['attachment']['name'];
+                				}
+                		}
+                		else
+                		{
+                			$img_desc = $news_item['description'];
+                		}
+                }
+                else
+                {
+                		$img_desc = $news_item['message'];
+                }       
+ ?>                                
+
+
+<div class="img">
+	<a target="_blank" href=<?php echo $img_fb_link; ?> >
+  <img src=<?php echo $img_src; ?> alt=<?php echo $img_desc; ?> width="110" height="90" />
+  </a>
+  
+  
+  
+  <div class="desc"><?php echo $img_desc ?></div>
+</div>
+<?php
+		$prev_obj=$news_item;
+			}
+		}
+	}	
+?>
+</p>
+</div>
+
+
+</body>
+
+</html>

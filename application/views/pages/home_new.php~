@@ -1,0 +1,79 @@
+<?php
+
+session_start();
+require_once("fb-php-sdk/facebook.php");
+$config = array();
+$config['appId'] = '117535755037825';
+$config['secret'] = '7a71c2c31cbc6a81ffc8fa17717dd603';
+
+$facebook = new Facebook($config);
+$user = $facebook->getUser();
+
+
+
+	
+?>
+<html>
+<head>
+<title>New Home</title>
+
+<style type="text/css">
+.nav
+{
+list-style-type:none;
+margin:0;
+padding:0;
+}
+.nav_link
+{
+display:inline;
+}
+</style>
+</head>
+<body>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '117535755037825', // App ID
+      channelUrl : 'http://localhost/fql-cig-test/index.php/channel/', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true,  // parse XFBML
+      oauth		  : true
+    });
+    
+  }
+</script>
+<ul class="nav">
+<li class="nav_link"><?php echo anchor('home_new', 'About', array('title' => 'About')); ?></li>
+<li class="nav_link"><?php echo anchor('photo_stream', 'Photo Stream', array('title' => 'Photo Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('video_stream', 'Video Stream', array('title' => 'Video Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('link_stream', 'Link Stream', array('title' => 'Link Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('updates_stream', 'Updates Stream', array('title' => 'Updates Stream')); ?></li>
+<li class="nav_link"><a href="about.asp">Hang outs</a></li>
+<li class="nav_link"><a href="about.asp">App based activity</a></li>
+</ul>
+
+<p>
+What are we trying to do? <br/>
+We are trying to classify your news feed and put it in appropriate buckets.
+</p>
+<p>
+Why are we doing this?
+<ul>
+<li>What you see is what you need - is the core concept behind this project.</li>
+<li>Often we miss what we needed the most. Not anymore!</li>
+<li>Save time and use facebook efficiently.</li>
+</ul>
+</p>
+<p>
+How are we doing this?
+<ul>
+<li>Login using facebook account.</li>
+<li>Use Photos,videos, links and other navigation links to see the respective streams.</li>
+</ul>
+</p>
+</body>
+
+</html>

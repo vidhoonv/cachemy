@@ -1,0 +1,237 @@
+/*
+
+CSS for Mocha UI
+
+Copyright:
+	Copyright (c) 2007-2008 Greg Houston, <http://greghoustondesign.com/>.
+	
+License:
+	MIT-style license.
+
+*/
+
+/* Layout
+---------------------------------------------------------------- */
+
+html, body {
+	overflow: hidden;
+}
+
+body {
+	margin: 0; /* Required */
+	background: #fff; /* #6989b3 url(../images/splash.gif) center center no-repeat; */
+}
+
+
+
+/* Navbar */
+
+#Navbar {
+	background: #4C4C4C;
+	height: 40px;
+	margin: 0 0px;	
+}
+
+#Navbar ul {	
+	padding: 0px 0px 0px 150px;
+	margin: 0;
+	list-style: none;
+	font-size: 20px;
+	}
+
+#Navbar li {
+	float: left;
+}
+
+#Navbar a {
+	display: block;
+}	
+	
+#Navbar ul li a {
+	padding: 10px 20px 6px 30px;	
+	color: #b2b2b2;
+	font-weight: normal;
+	text-decoration: none;
+	background-image: url(../images/toolfeed-divider.gif);
+   background-repeat: no-repeat;
+   background-position: right;
+}
+
+#Navbar ul li a:hover {
+	color: #fff;
+}
+
+#Navbar ul li a.arrow-right, #Navbar ul li a:hover.arrow-right {
+	background-image: url(../images/arrow-right.gif);
+	background-repeat: no-repeat;
+	background-position: right 7px;	
+} 
+
+#Navbar li ul {
+	padding: 2px;
+	border: 1px solid #3f3f3f;
+	background: #fff url(../images/bg-dropdown.gif) repeat-y;
+	position: absolute;
+	width: 164px;
+	left: -999em;
+	z-index: 8000;
+}
+
+#Navbar li:hover ul ul,
+#Navbar li.ieHover ul ul,
+#Navbar li:hover ul ul ul,
+#Navbar li.ieHover ul ul ul {
+	left: -999em;
+}
+
+#Navbar li ul ul { /* third-and-above-level lists */
+	margin: -22px 0 0 164px;
+}
+
+#Navbar li ul li .check {
+	position: absolute;
+	top: 8px;
+	left: 6px;
+	width: 5px;
+	height: 5px;
+	background: #555;
+	overflow: hidden;
+	line-height: 1px;
+	font-size: 1px;
+}
+
+#Navbar li ul li a {
+	position: relative;
+	padding: 1px 9px 1px 25px;
+	width: 130px;
+	color: #3f3f3f;
+	font-weight: normal;
+}
+
+#Navbar li ul li a:hover {
+	background: #6C98D9;
+	color: #fff;
+}
+
+#Navbar li ul li a:hover .check {
+	background: #fff;
+}
+
+#Navbar li:hover ul,
+#Navbar li.ieHover ul,
+#Navbar li li.ieHover ul,
+#Navbar li li li.ieHover ul,
+#Navbar li li:hover ul,
+#Navbar li li li:hover ul { /* lists nested under hovered list items */
+	left: auto;
+}
+
+#Navbar li:hover { /* For IE7 */
+    position: static;
+}
+
+#page-wrapper{
+width:1050px;height:600px;
+margin:30px 10px 10px 120px;
+background: #383838;
+moz-border-radius:11px;-khtml-border-radius:11px;-webkit-border-radius:11px;
+border-radius:5px;border:1px solid #e5e5e5;-moz-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-webkit-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-khtml-feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+
+}
+#user-pane{
+position: relative;overflow: hidden;
+width:250px;height:100px;margin:30px 10px 10px 70px;font:11px "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+padding:16px 16px 40px 16px;
+font-weight:normal;-moz-border-radius:11px;-khtml-border-radius:11px;-webkit-border-radius:11px;
+border-radius:5px;background:#fff;border:1px solid #e5e5e5;-moz-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-webkit-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-khtml-feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+
+}
+
+#recents-pane{
+position: relative;overflow: hidden;
+width:250px;height:300px;margin:30px 10px 10px 70px;font:11px "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+padding:16px 16px 40px 16px;
+font-weight:normal;-moz-border-radius:11px;-khtml-border-radius:11px;-webkit-border-radius:11px;
+border-radius:5px;background:#fff;border:1px solid #e5e5e5;-moz-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-webkit-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-khtml-feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+
+}
+#main-pane{
+overflow: hidden;
+width:550px;height:490px;margin:-555px 10px 10px 385px;font:11px "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+padding:16px 16px 40px 16px;
+font-weight:normal;-moz-border-radius:11px;-khtml-border-radius:11px;-webkit-border-radius:11px;
+border-radius:5px;background:#fff;border:1px solid #e5e5e5;-moz-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-webkit-feed-shadow:rgba(200,200,200,1) 0 4px 18px;-khtml-feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+feed-shadow:rgba(200,200,200,1) 0 4px 18px;
+
+}
+
+ #title{
+	position: relative;	
+	background: #f1f1f1 url(../images/bg-panel-header.gif) repeat-x;	
+	overflow: hidden;
+	border-bottom: 1px solid #d3d3d3;	
+	font-size: 22px;
+	margin: 0;
+	padding: 3px 8px 0 8px;
+	height: 30px;
+	overflow: hidden;
+	color: #3f3f3f;
+}
+ #intro{
+	position: relative;
+	display: inline;
+	font-weight: normal;
+	color: #555;	
+	font-size: 14px;
+	text-align: left;
+	padding: 4px 10px 2px 1px;
+	white-space:normal; 
+	float: right;
+
+}
+
+#intro h2{
+	font-size: 18px;color: #00CCCC;
+}
+
+
+#user_avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 3px;
+    left:14px; position: absolute; 
+}
+#feed {
+    width: 502px;
+    margin:  8px 0 21px;
+    position: relative;
+      padding: 21px;
+    font:13px/19px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-radius: 5px;
+}
+
+
+
+
+#feed_item {
+  position: relative;
+    border-left: 1px solid rgba(0,0,0,0.13);
+    border-right: 1px solid rgba(0,0,0,0.13);
+      border-top: 1px solid rgba(0,0,0,0.13);
+    border-bottom: 1px solid rgba(0,0,0,0.13);
+    min-height:50px; padding: 13px 13px 13px 76px;
+        background-color: white;
+}
+
+
+
+#feed .postmeta{float:right;margin:0 0 0 13px;text-align:right;}
+#feed .postmeta nav{visibility:hidden}
+#feed .postmeta span{color:rgba(0,0,0,0.50);font-size:11.5px;line-height:19.5px;}
+#feed .postmeta span#time{display:block;color:rgba(0,0,0,0.34)}
+#feed #name{color: black; font-weight: bold; overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+#feed #name + #location{margin-left:5px;font-size:11px;line-height:19.5px;color:rgba(0,0,0,0.34)}
+#feed p { margin: 2px 0 0; color: black; }

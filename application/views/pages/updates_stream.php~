@@ -1,0 +1,136 @@
+<?php
+session_start();
+require_once("fb-php-sdk/facebook.php");
+$config = array();
+$config['appId'] = '117535755037825';
+$config['secret'] = '7a71c2c31cbc6a81ffc8fa17717dd603';
+
+$facebook = new Facebook($config);
+$user = $facebook->getUser();
+?>
+
+<html>
+<head>
+<title>Updates Stream</title>
+<style type="text/css">
+.nav
+{
+list-style-type:none;
+margin:0 0 50 0;
+padding:0;
+}
+.nav_link
+{
+display:inline;
+}
+
+div.gallery
+{
+	margin:20px;
+		display: block;
+}
+div.img
+  {
+  margin:10px;
+  border:1px solid #0000ff;
+  height:auto;
+  width:auto;
+  float:left;
+  text-align:center;
+  }
+div.img img
+  {
+  display:inline;
+  margin:3px;
+  border:1px solid #ffffff;
+  }
+div.img a:hover img
+  {
+  border:1px solid #0000ff;
+  }
+div.desc
+  {
+  text-align:center;
+  font-weight:normal;
+  width:700px;
+  margin:2px;
+  }
+span.source
+  {
+  text-align:left;
+   margin:2px;
+  display: block;
+  }
+
+</style>
+</head>
+<body>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '117535755037825', // App ID
+      channelUrl : 'http://localhost/fql-cig-test/index.php/channel/', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true,  // parse XFBML
+      oauth		  : true
+    });
+    
+  }
+</script>
+<ul class="nav">
+<li class="nav_link"><?php echo anchor('home_new', 'About', array('title' => 'About')); ?></li>
+<li class="nav_link"><?php echo anchor('photo_stream', 'Photo Stream', array('title' => 'Photo Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('video_stream', 'Video Stream', array('title' => 'Video Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('link_stream', 'Link Stream', array('title' => 'Link Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('updates_stream', 'Updates Stream', array('title' => 'Updates Stream')); ?></li>
+<li class="nav_link"><a href="about.asp">Hang outs</a></li>
+<li class="nav_link"><a href="about.asp">App based activity</a></li>
+</ul>
+
+<div class="gallery">
+<p>
+
+<?php
+
+
+$fql = 'SELECT  source_id, attachment, attribution, description, message FROM stream WHERE filter_key = "nf" AND message!="" AND attribution = "" LIMIT 50';// . $user_id;
+
+
+$ret_obj = $facebook->api(array( 'method' => 'fql.query','query' => $fql));
+
+
+foreach($ret_obj as $news_item)
+{
+
+     if(array_key_exists('media',$news_item['attachment']) )
+     {
+     		continue;
+     }
+     else
+     {
+     				$status_msg = $news_item['message'];
+     				$source = $news_item['source_id'];
+               
+					
+ ?>                                
+
+<p>
+	<div class="img">
+		  		<div class="desc"><?php echo "<span class=\"source\" >" . $source . " says  " . "</span><br/>" . $status_msg ?></div>
+	</div>
+</p>
+<?php
+
+	
+		}
+	}	
+?>
+</p>
+
+</div>
+
+</body>
+
+</html>

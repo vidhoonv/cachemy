@@ -1,0 +1,194 @@
+<?php
+session_start();
+require_once("fb-php-sdk/facebook.php");
+$config = array();
+$config['appId'] = '117535755037825';
+$config['secret'] = '7a71c2c31cbc6a81ffc8fa17717dd603';
+
+$facebook = new Facebook($config);
+$user = $facebook->getUser();
+?>
+
+<html>
+<head>
+<title>App Activities</title>
+<style type="text/css">
+.nav
+{
+list-style-type:none;
+margin:0 0 50 0;
+padding:0;
+}
+.nav_link
+{
+display:inline;
+}
+
+div.gallery
+{
+	margin:20px;
+		display: block;
+}
+div.img
+  {
+  margin:10px;
+  border:1px solid #0000ff;
+  height:auto;
+  width:auto;
+  float:left;
+  text-align:center;
+  }
+div.img img
+  {
+  display:inline;
+  margin:3px;
+  border:1px solid #ffffff;
+  }
+div.img a:hover img
+  {
+  border:1px solid #0000ff;
+  }
+div.desc
+  {
+  text-align:center;
+  font-weight:normal;
+  width:700px;
+  margin:2px;
+  }
+span.source
+  {
+  text-align:left;
+   margin:2px;
+  display: block;
+  }
+
+</style>
+</head>
+<body>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '117535755037825', // App ID
+      channelUrl : 'http://localhost/fql-cig-test/index.php/channel/', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true,  // parse XFBML
+      oauth		  : true
+    });
+    
+  }
+</script>
+<ul class="nav">
+<li class="nav_link"><?php echo anchor('home_new', 'About', array('title' => 'About')); ?></li>
+<li class="nav_link"><?php echo anchor('photo_stream', 'Photo Stream', array('title' => 'Photo Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('video_stream', 'Video Stream', array('title' => 'Video Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('link_stream', 'Link Stream', array('title' => 'Link Stream')); ?></li>
+<li class="nav_link"><?php echo anchor('updates_stream', 'Updates Stream', array('title' => 'Updates Stream')); ?></li>
+<li class="nav_link"><a href="about.asp">Hang outs</a></li>
+<li class="nav_link"><?php echo anchor('app_stream', 'App activities', array('title' => 'App activities')); ?></li>
+</ul>
+
+<?php
+
+$app_photos='';
+$photo_begin = "<div class=\"img\"> <a target=\"_blank\" href=";
+$photo_mid1 = ">   <img src=";
+
+
+$photo_mid2 = " alt=";
+$photo_mid3 = "width=\"110\" height=\"90\" />  </a> <div class=\"desc\">";
+$photo_mid4 = "<br/><span class=\"source\" > Posted via:  ";
+$photo_end =  "</span><br/> </div>	</div>";
+$app_status='';
+
+
+$status_begin = "<div class=\"img\"><div class=\"desc\"><span class=\"source\" >";	
+$status_mid1 =  " says  " . "</span><br/>";
+$status_mid2 =  "<br/><br/><span class=\"source\" > Posted via:  ";
+$status_end =  "</span><br/> </div>	</div>";
+	
+
+
+
+$fql = 'SELECT  source_id, attachment, attribution, description, message FROM stream WHERE filter_key = "nf" AND attribution != "" LIMIT 50';// . $user_id;
+
+
+$ret_obj = $facebook->api(array( 'method' => 'fql.query','query' => $fql));
+
+
+foreach($ret_obj as $news_item)
+{
+		$app_name = $news_item['attribution'];
+		
+     if(array_key_exists('media',$news_item['attachment']) )
+     {
+     		if(array_key_exists('0',$news_item['attachment']['media']) && $news_item['attachment']['media'][0]['type'] == "photo")
+     		{
+     				   $img_src =   $news_item['attachment']['media'][0]['src'];  
+               	 $img_fb_link =    $news_item['attachment']['media'][0]['href'];
+             		   if(empty($news_item['message']))
+               		 {
+                				if(empty($news_item['description']))
+                				{
+                						if(empty($news_item['attachment']['name']))
+                						{
+                								if(empty($news_item['attachment']['description']))
+                								{
+                									$img_desc = "Posted by" . $news_item['source_id'];
+                								}
+                								else
+                								{
+                										$img_desc = $news_item['attachment']['description'];
+                								}
+                						}
+                					else
+                					{
+                						$img_desc = $news_item['attachment']['name'];
+                					}
+                			}
+                			else
+                			{
+                				$img_desc = $news_item['description'];
+                			}
+             	   }
+              	  else
+                {
+                		$img_desc = $news_item['message'];
+                }       
+                
+               $app_photos .=  $photo_begin . $img_fb_link . $photo_mid1 . $img_src . $photo_mid2 . $img_desc .  $photo_mid3 .  $img_desc . $photo_mid4 . $app_name . $photo_end;
+     		}
+     }
+     else if( $news_item['message'] != "" )
+     {
+     				$status_msg = $news_item['message'];
+     				$source = $news_item['source_id'];
+     			
+               $app_status .= $status_begin . $source . $status_mid1 . $status_msg . $status_mid2 . $app_name . $status_end;
+               
+		}
+		else
+		{
+			continue;
+		}
+	}	
+?>
+<div class="gallery">
+<p>
+<?php echo $app_photos; ?>
+
+</p>
+
+</div>
+
+<div class="gallery">
+<p>
+<?php echo $app_status; ?>
+
+</p>
+
+</div>
+</body>
+
+</html>
